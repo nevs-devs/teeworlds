@@ -70,7 +70,7 @@ public:
      */
     void update() {
         uint8_t buffer[BUFFERSIZE];
-        int size = zmq_recv(receiver, buffer,  BUFFERSIZE-1, ZMQ_DONTWAIT);
+        int size = zmq_recv(receiver, buffer,  BUFFERSIZE, ZMQ_DONTWAIT);
         if (size == -1)
             return;
 

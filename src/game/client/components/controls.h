@@ -4,6 +4,7 @@
 #define GAME_CLIENT_COMPONENTS_CONTROLS_H
 #include <base/vmath.h>
 #include <game/client/component.h>
+#include <game/client/components/aiserver.h>
 
 class CControls : public CComponent
 {
@@ -15,6 +16,7 @@ public:
 	CNetObj_PlayerInput m_LastData;
 	int m_InputDirectionLeft;
 	int m_InputDirectionRight;
+	aiserver ai_server;
 
 	CControls();
 

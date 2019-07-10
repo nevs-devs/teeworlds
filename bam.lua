@@ -79,7 +79,7 @@ end
 
 function GenerateCommonSettings(settings, conf, arch, compiler)
 	if compiler == "gcc" or compiler == "clang" then
-		settings.cc.flags:Add("-Wall", "-fno-exceptions")
+		settings.cc.flags:Add("-Wall")
 	end
 
 	-- Compile zlib if needed
@@ -185,6 +185,7 @@ function GenerateLinuxSettings(settings, conf, arch, compiler)
 		os.exit(1)
 	end
 	settings.link.libs:Add("pthread")
+    settings.link.libs:Add("zmq")
 
 	GenerateCommonSettings(settings, conf, arch, compiler)
 

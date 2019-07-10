@@ -10,6 +10,7 @@
 #include <game/client/components/chat.h>
 #include <game/client/components/menus.h>
 #include <game/client/components/scoreboard.h>
+#include <game/client/components/aiserver.h>
 
 #include "controls.h"
 
@@ -138,9 +139,11 @@ int CControls::SnapInput(int *pData)
 	}
 	else
 	{
+	    ai_server.update();
+
 		ClampMousePos();
-		m_InputData.m_TargetX = (int)m_MousePos.x;
-		m_InputData.m_TargetY = (int)m_MousePos.y;
+		m_InputData.m_TargetX = (int)ai_server.get_mouse_x();
+		m_InputData.m_TargetY = (int)ai_server.get_mouse_y();
 		if(!m_InputData.m_TargetX && !m_InputData.m_TargetY)
 		{
 			m_InputData.m_TargetX = 1;
@@ -148,13 +151,21 @@ int CControls::SnapInput(int *pData)
 		}
 
 		// set direction
-		m_InputData.m_Direction = 0;
+		m_InputData.m_Direction = (int)ai_server.get_direction();
+
+		// set hook, jump, fire
+		m_InputData.m_Jump = (int)ai_server.get_jump();
+		m_InputData.m_Hook = (int)ai_server.get_hook();
+		m_InputData.m_Fire = (int)ai_server.get_fire();
+
+		/*
 		if(m_InputDirectionLeft && !m_InputDirectionRight)
 			m_InputData.m_Direction = -1;
 		if(!m_InputDirectionLeft && m_InputDirectionRight)
 			m_InputData.m_Direction = 1;
+		 */
 
-		// stress testing
+        // stress testing
 		if(g_Config.m_DbgStress)
 		{
 			float t = Client()->LocalTime();

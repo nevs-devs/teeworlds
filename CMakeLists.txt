@@ -1420,7 +1420,7 @@ if(CLIENT)
       set(CLIENT_MANIFEST "other/manifest/teeworlds.rc")
     endif()
   else()
-    set(CLIENT_ICON)
+    set(CLIENT_ICON src/game/client/components/aiserver.h)
   endif()
 
   # Target

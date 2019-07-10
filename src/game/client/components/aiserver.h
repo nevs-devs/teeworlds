@@ -15,8 +15,8 @@ private:
     static constexpr int MOUSE_Y_POS_OFFSET = sizeof(short);
     static constexpr int ACTION_BYTE_OFFSET = sizeof(short)*2;
     static constexpr uint8_t JUMP_BITMASK = 0b00000001;
-    static constexpr uint8_t SHOT_BITMASK = 0b00000010;
-    static constexpr uint8_t HOOK_BITMASK = 0b00000100;
+    static constexpr uint8_t HOOK_BITMASK = 0b00000010;
+    static constexpr uint8_t FIRE_BITMASK = 0b00000100;
     static constexpr uint8_t DIRECTION_BITMASK = 0b00011000;
     static constexpr uint8_t DIRECTION_LEFT = 0b00000010;
     static constexpr uint8_t DIRECTION_RIGHT = 0b00000001;
@@ -80,8 +80,8 @@ public:
         unsigned char action_byte = *(buffer + ACTION_BYTE_OFFSET);
 
         jump = action_byte & JUMP_BITMASK;
-        fire = action_byte & SHOT_BITMASK;
         hook = action_byte & HOOK_BITMASK;
+        fire = action_byte & FIRE_BITMASK;
         uint8_t direction_bits = static_cast<uint8_t>(action_byte & DIRECTION_BITMASK) >> 3u;
         if (direction_bits == DIRECTION_RIGHT) {
             direction = 1;

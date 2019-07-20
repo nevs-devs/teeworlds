@@ -6,6 +6,7 @@
 #define TEEWORLDS_AISERVER_H
 
 #include <zmq.hpp>
+#include <iostream>
 
 
 class aiserver {
@@ -33,18 +34,28 @@ private:
 
     // zmq
     void* zmq_context;
-    void* receiver;
+    void* actions_receiver;
+    void* game_information_sender;
 
-    explicit aiserver(int port) : direction(0), mouse_x(0), mouse_y(0), jump(false), fire(false), hook(false)
+    explicit aiserver(const std::string& receive_port, const std::string& send_port)
+        : direction(0), mouse_x(0), mouse_y(0), jump(false), fire(false), hook(false)
     {
-        std::string address = "tcp://localhost:" + std::to_string(port); // TODO
+        std::string address = "tcp://localhost:" + receive_port;
         zmq_context = zmq_ctx_new();
-        receiver = zmq_socket(zmq_context, ZMQ_PULL);
-        zmq_connect(receiver, address.c_str());
+
+        // action actions_receiver
+        actions_receiver = zmq_socket(zmq_context, ZMQ_PULL);
+        zmq_connect(actions_receiver, address.c_str());
+
+        // game information sender
+        game_information_sender = zmq_socket(zmq_context, ZMQ_PUSH);
+        std::string send_address = "tcp://*:" + send_port;
+        zmq_bind(game_information_sender, send_address.c_str());
     }
 public:
-    static void init(int port) {
-        instance = new aiserver(port);
+    static void init(const std::string& receive_port, const std::string& send_port) {
+        std::cout << "ai server started:\n\treceive port: " << receive_port  << "\n\tsend port   : " << send_port << std::endl;
+        instance = new aiserver(receive_port, send_port);
     }
 
     static aiserver* get_instance() {
@@ -78,9 +89,9 @@ public:
     /*
      * This updated the internal state of this aiserver by fetching all data send by the sender.
      */
-    void update() {
+    void receive_update() {
         uint8_t buffer[BUFFERSIZE];
-        int size = zmq_recv(receiver, buffer,  BUFFERSIZE, ZMQ_DONTWAIT);
+        int size = zmq_recv(actions_receiver, buffer,  BUFFERSIZE, ZMQ_DONTWAIT);
         if (size == -1)
             return;
 
@@ -100,6 +111,11 @@ public:
         } else {
             direction = 0;
         }
+    }
+
+    void send_update(int x_position, int y_position) {
+        const int buffer[] = {x_position, y_position};
+        zmq_send(game_information_sender, buffer, sizeof(int)*2, ZMQ_DONTWAIT);
     }
 };
 

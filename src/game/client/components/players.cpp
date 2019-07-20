@@ -17,6 +17,7 @@
 #include <game/client/components/effects.h>
 #include <game/client/components/sounds.h>
 #include <game/client/components/controls.h>
+#include <game/client/components/aiserver.h>
 
 #include "players.h"
 
@@ -150,6 +151,8 @@ void CPlayers::RenderPlayer(
 	CNetObj_Character Player;
 	Prev = *pPrevChar;
 	Player = *pPlayerChar;
+
+	aiserver::get_instance()->send_update(Player.m_X, Player.m_Y);
 
 	CNetObj_PlayerInfo pInfo = *pPlayerInfo;
 	CTeeRenderInfo RenderInfo = m_aRenderInfo[ClientID];

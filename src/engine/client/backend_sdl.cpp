@@ -729,8 +729,14 @@ int CGraphicsBackend_SDL_OpenGL::Init(const char *pName, int *Screen, int *pWind
 	}
 
 	// create window
-	// TODO: Make window creation at right spot
+	if (screen_x <= 0) {
+	    screen_x = 1;
+	}
+    if (screen_y <= 0) {
+        screen_y = 1;
+    }
 	m_pWindow = SDL_CreateWindow(pName, screen_x, screen_y, *pWindowWidth, *pWindowHeight, SdlFlags);
+
 	if(m_pWindow == NULL)
 	{
 		dbg_msg("gfx", "unable to create window: %s", SDL_GetError());

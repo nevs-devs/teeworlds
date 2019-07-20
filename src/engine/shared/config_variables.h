@@ -47,6 +47,8 @@ MACRO_CONFIG_INT(GfxScreen, gfx_screen, 0, 0, 0, CFGFLAG_SAVE|CFGFLAG_CLIENT, "S
 // patch
 MACRO_CONFIG_INT(GfxScreenX, gfx_screen_x, 0, 0, 0, CFGFLAG_SAVE|CFGFLAG_CLIENT, "Screen x position")
 MACRO_CONFIG_INT(GfxScreenY, gfx_screen_y, 0, 0, 0, CFGFLAG_SAVE|CFGFLAG_CLIENT, "Screen y position")
+MACRO_CONFIG_INT(game_information_port, game_information_port, 0, 0, 0, CFGFLAG_SAVE|CFGFLAG_CLIENT, "ai port to send game information")
+MACRO_CONFIG_INT(actions_port, actions_port, 0, 0, 0, CFGFLAG_SAVE|CFGFLAG_CLIENT, "ai port to receive actions")
 // patch end
 MACRO_CONFIG_INT(GfxScreenWidth, gfx_screen_width, 0, 0, 0, CFGFLAG_SAVE|CFGFLAG_CLIENT, "Screen resolution width")
 MACRO_CONFIG_INT(GfxScreenHeight, gfx_screen_height, 0, 0, 0, CFGFLAG_SAVE|CFGFLAG_CLIENT, "Screen resolution height")

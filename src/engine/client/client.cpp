@@ -2631,7 +2631,23 @@ int main(int argc, const char **argv) // ignore_convention
 		}
 	}
 
-	aiserver::init(5555);
+	std::string actions_port = "5555";
+	for (int i = 1; i < argc; i++) {
+	    const char* port = str_startswith(argv[i], "actions_port ");
+	    if (port) {
+	        actions_port = std::string(port);
+	    }
+	}
+
+	std::string game_information_port = "5556";
+    for (int i = 1; i < argc; i++) {
+        const char* port = str_startswith(argv[i], "game_information_port ");
+        if (port) {
+            game_information_port = std::string(port);
+        }
+    }
+    aiserver::init(actions_port, game_information_port);
+
 #if defined(CONF_FAMILY_WINDOWS)
 	bool HideConsole = false;
 	#ifdef CONF_RELEASE

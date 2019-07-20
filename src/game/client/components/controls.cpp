@@ -139,7 +139,7 @@ int CControls::SnapInput(int *pData)
 	}
 	else
 	{
-	    aiserver::get_instance()->update();
+	    aiserver::get_instance()->receive_update();
 
 		ClampMousePos();
 		m_InputData.m_TargetX = (int)aiserver::get_instance()->get_mouse_x();

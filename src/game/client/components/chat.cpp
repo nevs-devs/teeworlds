@@ -485,7 +485,7 @@ void CChat::AddLine(int ClientID, int Mode, const char *pLine, int TargetID)
 		// unknown client
 		if(ClientID < 0 || !m_pClient->m_aClients[ClientID].m_Active || TargetID < 0 || !m_pClient->m_aClients[TargetID].m_Active)
 			return;
-		// should be sender or receiver
+		// should be sender or actions_receiver
 		if(ClientID != m_pClient->m_LocalClientID && TargetID != m_pClient->m_LocalClientID)
 			return;
 		// ignore and chat filter

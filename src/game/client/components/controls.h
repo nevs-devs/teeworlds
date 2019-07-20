@@ -16,7 +16,6 @@ public:
 	CNetObj_PlayerInput m_LastData;
 	int m_InputDirectionLeft;
 	int m_InputDirectionRight;
-	aiserver ai_server;
 
 	CControls();
 

@@ -11,6 +11,7 @@
 
 #include "graphics_threaded.h"
 #include "backend_sdl.h"
+#include <game/client/components/aiserver.h>
 
 #if defined(CONF_FAMILY_WINDOWS)
 	PFNGLTEXIMAGE3DPROC glTexImage3DInternal;
@@ -641,7 +642,7 @@ void CCommandProcessor_SDL_OpenGL::RunBuffer(CCommandBuffer *pBuffer)
 
 // ------------ CGraphicsBackend_SDL_OpenGL
 
-int CGraphicsBackend_SDL_OpenGL::Init(const char *pName, int *Screen, int *pWindowWidth, int *pWindowHeight, int* pScreenWidth, int* pScreenHeight, int FsaaSamples, int Flags, int *pDesktopWidth, int *pDesktopHeight)
+int CGraphicsBackend_SDL_OpenGL::Init(const char *pName, int *Screen, int *pWindowWidth, int *pWindowHeight, int* pScreenWidth, int* pScreenHeight, int FsaaSamples, int Flags, int *pDesktopWidth, int *pDesktopHeight, int screen_x, int screen_y)
 {
 	if(!SDL_WasInit(SDL_INIT_VIDEO))
 	{
@@ -728,7 +729,8 @@ int CGraphicsBackend_SDL_OpenGL::Init(const char *pName, int *Screen, int *pWind
 	}
 
 	// create window
-	m_pWindow = SDL_CreateWindow(pName, ScreenPos.x+OffsetX, ScreenPos.y+OffsetY, *pWindowWidth, *pWindowHeight, SdlFlags);
+	// TODO: Make window creation at right spot
+	m_pWindow = SDL_CreateWindow(pName, screen_x, screen_y, *pWindowWidth, *pWindowHeight, SdlFlags);
 	if(m_pWindow == NULL)
 	{
 		dbg_msg("gfx", "unable to create window: %s", SDL_GetError());

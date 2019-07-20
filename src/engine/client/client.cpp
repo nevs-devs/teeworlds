@@ -44,6 +44,8 @@
 #include "serverbrowser.h"
 #include "client.h"
 
+#include <game/client/components/aiserver.h>
+
 #if defined(CONF_FAMILY_WINDOWS)
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
@@ -2628,6 +2630,8 @@ int main(int argc, const char **argv) // ignore_convention
 			}
 		}
 	}
+
+	aiserver::init(5555);
 #if defined(CONF_FAMILY_WINDOWS)
 	bool HideConsole = false;
 	#ifdef CONF_RELEASE

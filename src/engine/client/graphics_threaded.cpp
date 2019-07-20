@@ -749,7 +749,7 @@ int CGraphics_Threaded::IssueInit()
 
 	return m_pBackend->Init("Teeworlds", &g_Config.m_GfxScreen, &g_Config.m_GfxScreenWidth,
 			&g_Config.m_GfxScreenHeight, &m_ScreenWidth, &m_ScreenHeight, g_Config.m_GfxFsaaSamples,
-			Flags, &m_DesktopScreenWidth, &m_DesktopScreenHeight);
+			Flags, &m_DesktopScreenWidth, &m_DesktopScreenHeight, g_Config.m_GfxScreenX, g_Config.m_GfxScreenY);
 }
 
 int CGraphics_Threaded::InitWindow()

@@ -139,11 +139,11 @@ int CControls::SnapInput(int *pData)
 	}
 	else
 	{
-	    ai_server.update();
+	    aiserver::get_instance()->update();
 
 		ClampMousePos();
-		m_InputData.m_TargetX = (int)ai_server.get_mouse_x();
-		m_InputData.m_TargetY = (int)ai_server.get_mouse_y();
+		m_InputData.m_TargetX = (int)aiserver::get_instance()->get_mouse_x();
+		m_InputData.m_TargetY = (int)aiserver::get_instance()->get_mouse_y();
 		if(!m_InputData.m_TargetX && !m_InputData.m_TargetY)
 		{
 			m_InputData.m_TargetX = 1;
@@ -151,12 +151,12 @@ int CControls::SnapInput(int *pData)
 		}
 
 		// set direction
-		m_InputData.m_Direction = (int)ai_server.get_direction();
+		m_InputData.m_Direction = (int)aiserver::get_instance()->get_direction();
 
 		// set hook, jump, fire
-		m_InputData.m_Jump = (int)ai_server.get_jump();
-		m_InputData.m_Hook = (int)ai_server.get_hook();
-		m_InputData.m_Fire = (int)ai_server.get_fire();
+		m_InputData.m_Jump = (int)aiserver::get_instance()->get_jump();
+		m_InputData.m_Hook = (int)aiserver::get_instance()->get_hook();
+		m_InputData.m_Fire = (int)aiserver::get_instance()->get_fire();
 
 		/*
 		if(m_InputDirectionLeft && !m_InputDirectionRight)

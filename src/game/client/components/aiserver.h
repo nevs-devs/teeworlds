@@ -21,6 +21,8 @@ private:
     static constexpr uint8_t DIRECTION_LEFT = 0b00000010;
     static constexpr uint8_t DIRECTION_RIGHT = 0b00000001;
 
+    static aiserver* instance;
+
     // player actions
     int8_t direction;
     short mouse_x;
@@ -33,12 +35,20 @@ private:
     void* zmq_context;
     void* receiver;
 
-public:
-    aiserver() : direction(0), mouse_x(0), mouse_y(0), jump(false), fire(false), hook(false)
+    explicit aiserver(int port) : direction(0), mouse_x(0), mouse_y(0), jump(false), fire(false), hook(false)
     {
+        std::string address = "tcp://localhost:" + std::to_string(port); // TODO
         zmq_context = zmq_ctx_new();
         receiver = zmq_socket(zmq_context, ZMQ_PULL);
-        zmq_connect(receiver, "tcp://localhost:5555");
+        zmq_connect(receiver, address.c_str());
+    }
+public:
+    static void init(int port) {
+        instance = new aiserver(port);
+    }
+
+    static aiserver* get_instance() {
+        return instance;
     }
 
     int8_t get_direction() const {

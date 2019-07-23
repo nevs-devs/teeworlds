@@ -94,24 +94,13 @@ public:
     void reset_game() const {
         if (client->RconAuthed()) {
             client->Rcon("restart");
+            std::cout << "restarted" << std::endl;
         }
     }
 
-    /*
-     * This updated the internal state of this aiserver by fetching all data send by the sender.
-     */
-    void receive_update() {
-        if (!client->RconAuthed()) {
-            client->RconAuth("", "123");
-        }
-
-        uint8_t buffer[BUFFERSIZE];
-        int size = zmq_recv(actions_receiver, buffer,  BUFFERSIZE, ZMQ_DONTWAIT);
-        if (size == -1)
-            return;
-
-        mouse_x = *reinterpret_cast<short*>(buffer + MOUSE_X_POS_OFFSET);
-        mouse_y = *reinterpret_cast<short*>(buffer + MOUSE_Y_POS_OFFSET);
+    void apply_buffer(const uint8_t* buffer) {
+        mouse_x = *reinterpret_cast<const short*>(buffer + MOUSE_X_POS_OFFSET);
+        mouse_y = *reinterpret_cast<const short*>(buffer + MOUSE_Y_POS_OFFSET);
 
         unsigned char action_byte = *(buffer + ACTION_BYTE_OFFSET);
 
@@ -131,6 +120,30 @@ public:
 
         if (reset) {
             reset_game();
+        }
+    }
+
+    /*
+     * This updated the internal state of this aiserver by fetching all data send by the sender.
+     */
+    void receive_update() {
+        if (!client->RconAuthed()) {
+            client->RconAuth("", "123");
+        }
+
+        uint8_t buffer[BUFFERSIZE];
+
+        unsigned int updates_received = 0;
+        while (true) {
+            int size = zmq_recv(actions_receiver, buffer,  BUFFERSIZE, ZMQ_DONTWAIT);
+            if (size == -1) break;
+
+            updates_received++;
+            apply_buffer(buffer);
+        }
+
+        if (updates_received > 1) {
+            std::cout << "WARNING: skipped " << updates_received - 1 << " updates" << std::endl;
         }
     }
 

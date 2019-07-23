@@ -7,6 +7,7 @@
 
 #include <zmq.hpp>
 #include <iostream>
+#include <engine/client.h>
 
 
 class aiserver {
@@ -18,6 +19,7 @@ private:
     static constexpr uint8_t JUMP_BITMASK = 0b00000001;
     static constexpr uint8_t HOOK_BITMASK = 0b00000010;
     static constexpr uint8_t FIRE_BITMASK = 0b00000100;
+    static constexpr uint8_t RESET_BITMASK = 0b00100000;
     static constexpr uint8_t DIRECTION_BITMASK = 0b00011000;
     static constexpr uint8_t DIRECTION_LEFT = 0b00000010;
     static constexpr uint8_t DIRECTION_RIGHT = 0b00000001;
@@ -31,14 +33,17 @@ private:
     bool jump;
     bool fire;
     bool hook;
+    bool reset;
 
     // zmq
     void* zmq_context;
     void* actions_receiver;
     void* game_information_sender;
 
-    explicit aiserver(const std::string& receive_port, const std::string& send_port)
-        : direction(0), mouse_x(0), mouse_y(0), jump(false), fire(false), hook(false)
+    IClient* client;
+
+    explicit aiserver(const std::string& receive_port, const std::string& send_port, IClient* client)
+        : direction(0), mouse_x(0), mouse_y(0), jump(false), fire(false), hook(false), reset(false), client(client)
     {
         std::string address = "tcp://localhost:" + receive_port;
         zmq_context = zmq_ctx_new();
@@ -53,9 +58,9 @@ private:
         zmq_bind(game_information_sender, send_address.c_str());
     }
 public:
-    static void init(const std::string& receive_port, const std::string& send_port) {
+    static void init(const std::string& receive_port, const std::string& send_port, IClient* client) {
         std::cout << "ai server started:\n\treceive port: " << receive_port  << "\n\tsend port   : " << send_port << std::endl;
-        instance = new aiserver(receive_port, send_port);
+        instance = new aiserver(receive_port, send_port, client);
     }
 
     static aiserver* get_instance() {
@@ -86,10 +91,20 @@ public:
         return mouse_y;
     }
 
+    void reset_game() const {
+        if (client->RconAuthed()) {
+            client->Rcon("restart");
+        }
+    }
+
     /*
      * This updated the internal state of this aiserver by fetching all data send by the sender.
      */
     void receive_update() {
+        if (!client->RconAuthed()) {
+            client->RconAuth("", "123");
+        }
+
         uint8_t buffer[BUFFERSIZE];
         int size = zmq_recv(actions_receiver, buffer,  BUFFERSIZE, ZMQ_DONTWAIT);
         if (size == -1)
@@ -103,6 +118,8 @@ public:
         jump = action_byte & JUMP_BITMASK;
         hook = action_byte & HOOK_BITMASK;
         fire = action_byte & FIRE_BITMASK;
+        reset = action_byte & RESET_BITMASK;
+
         uint8_t direction_bits = static_cast<uint8_t>(action_byte & DIRECTION_BITMASK) >> 3u;
         if (direction_bits == DIRECTION_RIGHT) {
             direction = 1;
@@ -110,6 +127,10 @@ public:
             direction = -1;
         } else {
             direction = 0;
+        }
+
+        if (reset) {
+            reset_game();
         }
     }
 

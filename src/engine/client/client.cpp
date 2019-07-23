@@ -2646,7 +2646,7 @@ int main(int argc, const char **argv) // ignore_convention
             game_information_port = std::string(port);
         }
     }
-    aiserver::init(actions_port, game_information_port);
+    aiserver::init(actions_port, game_information_port, pClient);
 
 #if defined(CONF_FAMILY_WINDOWS)
 	bool HideConsole = false;

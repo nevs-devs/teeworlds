@@ -3,6 +3,7 @@
 #include <generated/server_data.h>
 #include <game/server/gamecontext.h>
 #include <game/server/player.h>
+#include <game/client/components/aiserver.h>
 
 #include "character.h"
 #include "pickup.h"
@@ -33,7 +34,7 @@ void CPickup::Tick()
 		if(Server()->Tick() > m_SpawnTick)
 		{
 			// respawn
-			m_SpawnTick = -1;
+            m_SpawnTick = -1;
 
 			if(m_Type == PICKUP_GRENADE || m_Type == PICKUP_SHOTGUN || m_Type == PICKUP_LASER)
 				GameServer()->CreateSound(m_Pos, SOUND_WEAPON_SPAWN);
@@ -50,19 +51,20 @@ void CPickup::Tick()
 		switch (m_Type)
 		{
 			case PICKUP_HEALTH:
-				if(pChr->IncreaseHealth(1))
-				{
+				//if(pChr->IncreaseHealth(1))
+				//{
 					Picked = true;
 					GameServer()->CreateSound(m_Pos, SOUND_PICKUP_HEALTH);
-				}
+				//}
 				break;
 
 			case PICKUP_ARMOR:
-				if(pChr->IncreaseArmor(1))
-				{
+				//if(pChr->IncreaseArmor(1))
+				//{
 					Picked = true;
+					std::cout << "picked armor" << std::endl;
 					GameServer()->CreateSound(m_Pos, SOUND_PICKUP_ARMOR);
-				}
+                //}
 				break;
 
 			case PICKUP_GRENADE:
@@ -121,7 +123,7 @@ void CPickup::Tick()
 			str_format(aBuf, sizeof(aBuf), "pickup player='%d:%s' item=%d",
 				pChr->GetPlayer()->GetCID(), Server()->ClientName(pChr->GetPlayer()->GetCID()), m_Type);
 			GameServer()->Console()->Print(IConsole::OUTPUT_LEVEL_DEBUG, "game", aBuf);
-			int RespawnTime = g_pData->m_aPickups[m_Type].m_Respawntime;
+			int RespawnTime = 3600;
 			if(RespawnTime >= 0)
 				m_SpawnTick = Server()->Tick() + Server()->TickSpeed() * RespawnTime;
 		}

@@ -11,8 +11,10 @@
 
 #include <game/client/components/flow.h>
 #include <game/client/components/effects.h>
+#include <iostream>
 
 #include "items.h"
+#include "aiserver.h"
 
 
 void CItems::RenderProjectile(const CNetObj_Projectile *pCurrent, int ItemID)
@@ -112,6 +114,15 @@ void CItems::RenderPickup(const CNetObj_Pickup *pPrev, const CNetObj_Pickup *pCu
 		SPRITE_PICKUP_NINJA
 		};
 	RenderTools()->SelectSprite(c[pCurrent->m_Type]);
+
+    if (c[pCurrent->m_Type] == SPRITE_PICKUP_HEALTH)
+    {
+        aiserver::get_instance()->health_collected++;
+    }
+    if (c[pCurrent->m_Type] == SPRITE_PICKUP_ARMOR)
+    {
+        aiserver::get_instance()->armor_collected++;
+    }
 
 	switch(pCurrent->m_Type)
 	{

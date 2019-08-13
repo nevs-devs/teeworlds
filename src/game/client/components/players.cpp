@@ -152,7 +152,7 @@ void CPlayers::RenderPlayer(
 	Prev = *pPrevChar;
 	Player = *pPlayerChar;
 
-	aiserver::get_instance()->send_update(Player.m_X, Player.m_Y);
+	// aiserver::get_instance()->send_update(Player.m_X, Player.m_Y);
 
 	CNetObj_PlayerInfo pInfo = *pPlayerInfo;
 	CTeeRenderInfo RenderInfo = m_aRenderInfo[ClientID];

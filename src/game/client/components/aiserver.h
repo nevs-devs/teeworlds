@@ -42,7 +42,7 @@ private:
 
     IClient* client;
 
-    explicit aiserver(const std::string& receive_port, const std::string& send_port, IClient* client)
+    explicit aiserver(const std::string& receive_port, IClient* client)
         : direction(0), mouse_x(0), mouse_y(0), jump(false), fire(false), hook(false), reset(false), client(client), armor_collected(0), health_collected(0)
     {
         std::string address = "tcp://localhost:" + receive_port;
@@ -51,19 +51,14 @@ private:
         // action actions_receiver
         actions_receiver = zmq_socket(zmq_context, ZMQ_PULL);
         zmq_connect(actions_receiver, address.c_str());
-
-        // game information sender
-        game_information_sender = zmq_socket(zmq_context, ZMQ_PUSH);
-        std::string send_address = "tcp://*:" + send_port;
-        zmq_bind(game_information_sender, send_address.c_str());
     }
 public:
     int armor_collected;
     int health_collected;
 
-    static void init(const std::string& receive_port, const std::string& send_port, IClient* client) {
-        std::cout << "ai server started:\n\treceive port: " << receive_port  << "\n\tsend port   : " << send_port << std::endl;
-        instance = new aiserver(receive_port, send_port, client);
+    static void init(const std::string& receive_port, IClient* client) {
+        std::cout << "ai server started:\n\treceive port: " << receive_port << std::endl;
+        instance = new aiserver(receive_port, client);
     }
 
     static aiserver* get_instance() {
@@ -102,9 +97,6 @@ public:
     }
 
     void apply_buffer(const uint8_t* buffer) {
-        direction = 1;
-        return;
-
         mouse_x = *reinterpret_cast<const short*>(buffer + MOUSE_X_POS_OFFSET);
         mouse_y = *reinterpret_cast<const short*>(buffer + MOUSE_Y_POS_OFFSET);
 
@@ -155,12 +147,6 @@ public:
          */
     }
 
-    void send_update(int x_position, int y_position) {
-        const int buffer[] = {x_position, y_position, armor_collected, health_collected};
-        zmq_send(game_information_sender, buffer, sizeof(int)*4, ZMQ_DONTWAIT);
-        armor_collected = 0;
-        health_collected = 0;
-    }
 };
 
 

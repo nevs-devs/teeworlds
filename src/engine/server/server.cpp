@@ -26,6 +26,7 @@
 #include <engine/shared/snapshot.h>
 
 #include <mastersrv/mastersrv.h>
+#include <game/server/aiserver.h>
 
 #include "register.h"
 #include "server.h"
@@ -1844,6 +1845,15 @@ int main(int argc, const char **argv) // ignore_convention
 		if(argc > 1) // ignore_convention
 			pConsole->ParseArguments(argc-1, &argv[1]); // ignore_convention
 	}
+
+	std::string game_information_port = "5556";
+    for (int i = 1; i < argc; i++) {
+        const char* port = str_startswith(argv[i], "game_information_port ");
+        if (port) {
+            game_information_port = std::string(port);
+        }
+    }
+    aiserver::init(game_information_port);
 
 	// restore empty config strings to their defaults
 	pConfig->RestoreStrings();

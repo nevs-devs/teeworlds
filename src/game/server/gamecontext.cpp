@@ -20,6 +20,7 @@
 #include "gamemodes/tdm.h"
 #include "gamecontext.h"
 #include "player.h"
+#include "aiserver.h"
 
 enum
 {
@@ -473,6 +474,8 @@ void CGameContext::OnTick()
 
 	//if(world.paused) // make sure that the game object always updates
 	m_pController->Tick();
+
+	aiserver::get_instance()->send_update();
 
 	for(int i = 0; i < MAX_CLIENTS; i++)
 	{

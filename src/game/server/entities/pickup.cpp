@@ -3,7 +3,7 @@
 #include <generated/server_data.h>
 #include <game/server/gamecontext.h>
 #include <game/server/player.h>
-#include <game/client/components/aiserver.h>
+#include <game/server/aiserver.h>
 
 #include "character.h"
 #include "pickup.h"
@@ -55,6 +55,7 @@ void CPickup::Tick()
 				//{
 					Picked = true;
 					GameServer()->CreateSound(m_Pos, SOUND_PICKUP_HEALTH);
+					aiserver::get_instance()->health_collected++;
 				//}
 				break;
 
@@ -62,8 +63,8 @@ void CPickup::Tick()
 				//if(pChr->IncreaseArmor(1))
 				//{
 					Picked = true;
-					std::cout << "picked armor" << std::endl;
 					GameServer()->CreateSound(m_Pos, SOUND_PICKUP_ARMOR);
+                    aiserver::get_instance()->armor_collected++;
                 //}
 				break;
 

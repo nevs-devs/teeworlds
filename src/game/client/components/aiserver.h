@@ -43,7 +43,7 @@ private:
     IClient* client;
 
     explicit aiserver(const std::string& receive_port, const std::string& send_port, IClient* client)
-        : direction(0), mouse_x(0), mouse_y(0), jump(false), fire(false), hook(false), reset(false), client(client)
+        : direction(0), mouse_x(0), mouse_y(0), jump(false), fire(false), hook(false), reset(false), client(client), armor_collected(0), health_collected(0)
     {
         std::string address = "tcp://localhost:" + receive_port;
         zmq_context = zmq_ctx_new();
@@ -105,7 +105,6 @@ public:
         direction = 1;
         return;
 
-
         mouse_x = *reinterpret_cast<const short*>(buffer + MOUSE_X_POS_OFFSET);
         mouse_y = *reinterpret_cast<const short*>(buffer + MOUSE_Y_POS_OFFSET);
 
@@ -149,16 +148,16 @@ public:
             apply_buffer(buffer);
         }
 
+        /*
         if (updates_received > 1) {
             std::cout << "WARNING: skipped " << updates_received - 1 << " updates" << std::endl;
         }
-
-
+         */
     }
 
     void send_update(int x_position, int y_position) {
         const int buffer[] = {x_position, y_position, armor_collected, health_collected};
-        zmq_send(game_information_sender, buffer, sizeof(int)*2, ZMQ_DONTWAIT);
+        zmq_send(game_information_sender, buffer, sizeof(int)*4, ZMQ_DONTWAIT);
         armor_collected = 0;
         health_collected = 0;
     }

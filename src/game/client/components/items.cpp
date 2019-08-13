@@ -115,15 +115,6 @@ void CItems::RenderPickup(const CNetObj_Pickup *pPrev, const CNetObj_Pickup *pCu
 		};
 	RenderTools()->SelectSprite(c[pCurrent->m_Type]);
 
-    if (c[pCurrent->m_Type] == SPRITE_PICKUP_HEALTH)
-    {
-        aiserver::get_instance()->health_collected++;
-    }
-    if (c[pCurrent->m_Type] == SPRITE_PICKUP_ARMOR)
-    {
-        aiserver::get_instance()->armor_collected++;
-    }
-
 	switch(pCurrent->m_Type)
 	{
 	case PICKUP_GRENADE:

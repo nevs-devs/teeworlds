@@ -69,7 +69,7 @@ class CClient : public IClient, public CDemoPlayer::IListner
 	enum
 	{
 		NUM_SNAPSHOT_TYPES=2,
-		PREDICTION_MARGIN=1000/50/2, // magic network prediction value
+		PREDICTION_MARGIN=1000/SERVER_TICK_SPEED/2, // magic network prediction value
 	};
 
 	class CNetClient m_NetClient;

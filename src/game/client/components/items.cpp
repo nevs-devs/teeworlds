@@ -202,7 +202,7 @@ void CItems::RenderLaser(const struct CNetObj_Laser *pCurrent)
 	vec2 Dir = normalize(Pos-From);
 
 	float Ticks = (Client()->GameTick() - pCurrent->m_StartTick) + Client()->IntraGameTick();
-	float Ms = (Ticks/50.0f) * 1000.0f;
+	float Ms = (Ticks/Client()->GameTickSpeed()) * 1000.0f;
 	float a = Ms / m_pClient->m_Tuning.m_LaserBounceDelay;
 	a = clamp(a, 0.0f, 1.0f);
 	float Ia = 1-a;

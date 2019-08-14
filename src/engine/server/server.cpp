@@ -559,7 +559,7 @@ void CServer::DoSnapshot()
 			continue;
 
 		// this client is trying to recover, don't spam snapshots
-		if(m_aClients[i].m_SnapRate == CClient::SNAPRATE_RECOVER && (Tick()%50) != 0)
+		if(m_aClients[i].m_SnapRate == CClient::SNAPRATE_RECOVER && (Tick()%m_TickSpeed) != 0)
 			continue;
 
 		// this client is trying to recover, don't spam snapshots
@@ -970,7 +970,7 @@ void CServer::ProcessClientPacket(CNetChunk *pPacket)
 			for(int i = 0; i < Size/4; i++)
 				pInput->m_aData[i] = Unpacker.GetInt();
 
-			int PingCorrection = clamp(Unpacker.GetInt(), 0, 50);
+			int PingCorrection = clamp(Unpacker.GetInt(), 0, m_TickSpeed);
 			if(m_aClients[ClientID].m_Snapshots.Get(m_aClients[ClientID].m_LastAckedSnapshot, &TagTime, 0, 0) >= 0)
 			{
 				m_aClients[ClientID].m_Latency = (int)(((Now-TagTime)*1000)/time_freq());

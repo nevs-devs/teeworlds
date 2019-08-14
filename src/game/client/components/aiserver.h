@@ -8,6 +8,7 @@
 #include <zmq.hpp>
 #include <iostream>
 #include <engine/client.h>
+#include <engine/shared/protocol.h>
 
 
 class aiserver {

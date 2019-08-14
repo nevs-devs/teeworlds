@@ -2528,6 +2528,18 @@ int main(int argc, const char **argv) // ignore_convention
 	}
 #endif
 
+    int server_tick_speed = 50;
+    for (int i = 1; i < argc; i++) {
+        const char* tick_speed = str_startswith(argv[i], "tick_speed ");
+        if (tick_speed) {
+            server_tick_speed = std::stoi(tick_speed);
+        }
+    }
+
+    std::cout << "SERVER TICK SPEED: " << server_tick_speed << "\n" << std::endl;
+
+    SERVER_TICK_SPEED = server_tick_speed;
+
 	bool UseDefaultConfig = false;
 	for(int i = 1; i < argc; i++) // ignore_convention
 	{

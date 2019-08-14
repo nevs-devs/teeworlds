@@ -719,15 +719,6 @@ int CGraphicsBackend_SDL_OpenGL::Init(const char *pName, int *Screen, int *pWind
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
 	}
 
-	// calculate centered position in windowed mode
-	int OffsetX = 0;
-	int OffsetY = 0;
-	if(!(Flags&IGraphicsBackend::INITFLAG_FULLSCREEN) && *pDesktopWidth > *pWindowWidth && *pDesktopHeight > *pWindowHeight)
-	{
-		OffsetX = (*pDesktopWidth - *pWindowWidth) / 2;
-		OffsetY = (*pDesktopHeight - *pWindowHeight) / 2;
-	}
-
 	// create window
 	if (screen_x <= 0) {
 	    screen_x = 1;

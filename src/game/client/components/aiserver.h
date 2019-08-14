@@ -58,7 +58,7 @@ public:
     int health_collected;
 
     static void init(const std::string& receive_port, IClient* client, bool is_human) {
-        std::cout << "ai server started:\n\treceive port: " << receive_port << std::endl;
+        std::cout << "AI_SERVER:\n\treceive port: " << receive_port <<"\n\thuman controlled: " << (is_human? "true" : "false") << "\n" << std::endl;
         instance = new aiserver(receive_port, client, is_human);
     }
 

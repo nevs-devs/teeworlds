@@ -1278,7 +1278,7 @@ void CClient::ProcessServerPacket(CNetChunk *pPacket)
 				if(m_aInputs[k].m_Tick == InputPredTick)
 				{
 					Target = m_aInputs[k].m_PredictedTime + (time_get() - m_aInputs[k].m_Time);
-					Target = Target - (int64)(((TimeLeft-PREDICTION_MARGIN)/1000.0f)*time_freq());
+					Target = Target - (int64)(((TimeLeft-(1000/SERVER_TICK_SPEED/2))/1000.0f)*time_freq());
 					break;
 				}
 			}

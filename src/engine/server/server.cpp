@@ -1853,7 +1853,16 @@ int main(int argc, const char **argv) // ignore_convention
             game_information_port = std::string(port);
         }
     }
-    aiserver::init(game_information_port);
+
+    int server_tick_speed = 50;
+    for (int i = 1; i < argc; i++) {
+        const char* tick_speed = str_startswith(argv[i], "tick_speed ");
+        if (tick_speed) {
+            server_tick_speed = std::stoi(tick_speed);
+        }
+    }
+
+    aiserver::init(game_information_port, server_tick_speed);
 
 	// restore empty config strings to their defaults
 	pConfig->RestoreStrings();

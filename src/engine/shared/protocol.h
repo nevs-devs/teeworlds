@@ -5,6 +5,8 @@
 
 #include <base/system.h>
 
+static int SERVER_TICK_SPEED = 100;
+
 /*
 	Connection diagram - How the initilization works.
 
@@ -78,7 +80,6 @@ enum
 // this should be revised
 enum
 {
-	SERVER_TICK_SPEED=100,
 	SERVERINFO_FLAG_PASSWORD = 0x1,
 	SERVERINFO_LEVEL_MIN=0,
 	SERVERINFO_LEVEL_MAX=2,

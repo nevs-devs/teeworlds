@@ -144,7 +144,6 @@ int CControls::SnapInput(int *pData)
 		ClampMousePos();
 
 		if (aiserver::get_instance()->is_human_player()) {
-		    std::cout << m_MousePos.x << std::endl;
             m_InputData.m_TargetX = (int)m_MousePos.x;
             m_InputData.m_TargetY = (int)m_MousePos.y;
         } else {

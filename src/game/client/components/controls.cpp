@@ -142,28 +142,39 @@ int CControls::SnapInput(int *pData)
 	    aiserver::get_instance()->receive_update();
 
 		ClampMousePos();
-		m_InputData.m_TargetX = (int)aiserver::get_instance()->get_mouse_x();
-		m_InputData.m_TargetY = (int)aiserver::get_instance()->get_mouse_y();
+
+		if (aiserver::get_instance()->is_human_player()) {
+		    std::cout << m_MousePos.x << std::endl;
+            m_InputData.m_TargetX = (int)m_MousePos.x;
+            m_InputData.m_TargetY = (int)m_MousePos.y;
+        } else {
+            m_InputData.m_TargetX = (int)aiserver::get_instance()->get_mouse_x();
+            m_InputData.m_TargetY = (int)aiserver::get_instance()->get_mouse_y();
+        }
+
 		if(!m_InputData.m_TargetX && !m_InputData.m_TargetY)
 		{
 			m_InputData.m_TargetX = 1;
 			m_MousePos.x = 1;
 		}
 
-		// set direction
-		m_InputData.m_Direction = (int)aiserver::get_instance()->get_direction();
 
-		// set hook, jump, fire
-		m_InputData.m_Jump = (int)aiserver::get_instance()->get_jump();
-		m_InputData.m_Hook = (int)aiserver::get_instance()->get_hook();
-		m_InputData.m_Fire = (int)aiserver::get_instance()->get_fire();
+		if (aiserver::get_instance()->is_human_player()) {
+            m_InputData.m_Direction = 0;
+            if(m_InputDirectionLeft && !m_InputDirectionRight)
+                m_InputData.m_Direction = -1;
+            if(!m_InputDirectionLeft && m_InputDirectionRight)
+                m_InputData.m_Direction = 1;
+        } else {
+            // set direction
+            m_InputData.m_Direction = (int)aiserver::get_instance()->get_direction();
 
-		/*
-		if(m_InputDirectionLeft && !m_InputDirectionRight)
-			m_InputData.m_Direction = -1;
-		if(!m_InputDirectionLeft && m_InputDirectionRight)
-			m_InputData.m_Direction = 1;
-		 */
+            // set hook, jump, fire
+            m_InputData.m_Jump = (int)aiserver::get_instance()->get_jump();
+            m_InputData.m_Hook = (int)aiserver::get_instance()->get_hook();
+            m_InputData.m_Fire = (int)aiserver::get_instance()->get_fire();
+		}
+
 
         // stress testing
 		if(g_Config.m_DbgStress)

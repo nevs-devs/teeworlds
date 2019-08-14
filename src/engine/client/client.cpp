@@ -2639,7 +2639,15 @@ int main(int argc, const char **argv) // ignore_convention
 	    }
 	}
 
-    aiserver::init(actions_port, pClient);
+    bool is_human = false;
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--human") == 0) {
+            is_human = true;
+            break;
+        }
+    }
+
+    aiserver::init(actions_port, pClient, is_human);
 
 #if defined(CONF_FAMILY_WINDOWS)
 	bool HideConsole = false;

@@ -26,6 +26,8 @@ private:
 
     static aiserver* instance;
 
+    bool is_human;
+
     // player actions
     int8_t direction;
     short mouse_x;
@@ -38,12 +40,11 @@ private:
     // zmq
     void* zmq_context;
     void* actions_receiver;
-    void* game_information_sender;
 
     IClient* client;
 
-    explicit aiserver(const std::string& receive_port, IClient* client)
-        : direction(0), mouse_x(0), mouse_y(0), jump(false), fire(false), hook(false), reset(false), client(client), armor_collected(0), health_collected(0)
+    explicit aiserver(const std::string& receive_port, IClient* client, bool is_human)
+        : is_human(is_human), direction(0), mouse_x(0), mouse_y(0), jump(false), fire(false), hook(false), reset(false), client(client), armor_collected(0), health_collected(0)
     {
         std::string address = "tcp://localhost:" + receive_port;
         zmq_context = zmq_ctx_new();
@@ -56,9 +57,9 @@ public:
     int armor_collected;
     int health_collected;
 
-    static void init(const std::string& receive_port, IClient* client) {
+    static void init(const std::string& receive_port, IClient* client, bool is_human) {
         std::cout << "ai server started:\n\treceive port: " << receive_port << std::endl;
-        instance = new aiserver(receive_port, client);
+        instance = new aiserver(receive_port, client, is_human);
     }
 
     static aiserver* get_instance() {
@@ -87,6 +88,10 @@ public:
 
     short get_mouse_y() const {
         return mouse_y;
+    }
+
+    bool is_human_player() const {
+        return is_human;
     }
 
     void reset_game() const {

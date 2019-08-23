@@ -6,6 +6,7 @@
 #include <game/server/gamecontext.h>
 #include <game/server/gamecontroller.h>
 #include <game/server/player.h>
+#include <game/server/aiserver.h>
 
 #include "character.h"
 #include "laser.h"
@@ -653,6 +654,8 @@ void CCharacter::Die(int Killer, int Weapon)
 	m_Alive = false;
 	m_pPlayer->m_RespawnTick = Server()->Tick()+Server()->TickSpeed()/2;
 	int ModeSpecial = GameServer()->m_pController->OnCharacterDeath(this, GameServer()->m_apPlayers[Killer], Weapon);
+
+	aiserver::get_instance()->died = true;
 
 	char aBuf[256];
 	str_format(aBuf, sizeof(aBuf), "kill killer='%d:%s' victim='%d:%s' weapon=%d special=%d",

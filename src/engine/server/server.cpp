@@ -1,6 +1,8 @@
 /* (c) Magnus Auvinen. See licence.txt in the root of the distribution for more information. */
 /* If you are missing that file, acquire a complete release at teeworlds.com.                */
 
+#include <sys/resource.h>
+
 #include <base/math.h>
 #include <base/system.h>
 
@@ -1778,6 +1780,12 @@ int main(int argc, const char **argv) // ignore_convention
 		}
 	}
 #endif
+
+    const int priority = getpriority(PRIO_PROCESS, 0);
+    if (priority < 0) {
+        setpriority(PRIO_PROCESS, 0, -priority);
+        std::cout << "setting priority to 0" << std::endl;
+    }
 
     int server_tick_speed = 50;
     for (int i = 1; i < argc; i++) {

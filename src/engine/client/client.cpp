@@ -1,5 +1,6 @@
 /* (c) Magnus Auvinen. See licence.txt in the root of the distribution for more information. */
 /* If you are missing that file, acquire a complete release at teeworlds.com.                */
+#include <sys/resource.h>
 #include <new>
 #include <algorithm>
 
@@ -2516,6 +2517,12 @@ extern "C" int SDL_main(int argc, char **argv_) // ignore_convention
 #else
 int main(int argc, const char **argv) // ignore_convention
 {
+    const int priority = getpriority(PRIO_PROCESS, 0);
+    if (priority < 0) {
+        setpriority(PRIO_PROCESS, 0, -priority);
+        std::cout << "setting priority to 0" << std::endl;
+    }
+
 #endif
 #if defined(CONF_FAMILY_WINDOWS)
 	bool QuickEditMode = false;

@@ -2519,7 +2519,7 @@ int main(int argc, const char **argv) // ignore_convention
 {
     const int priority = getpriority(PRIO_PROCESS, 0);
     if (priority < 0) {
-        setpriority(PRIO_PROCESS, 0, -priority);
+        setpriority(PRIO_PROCESS, 0, 0);
         std::cout << "setting priority to 0" << std::endl;
     }
 

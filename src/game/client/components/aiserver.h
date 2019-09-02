@@ -5,6 +5,7 @@
 #ifndef TEEWORLDS_AISERVER_H
 #define TEEWORLDS_AISERVER_H
 
+#include <sys/resource.h>
 #include <zmq.hpp>
 #include <iostream>
 #include <engine/client.h>
@@ -60,6 +61,7 @@ public:
 
     static void init(const std::string& receive_port, IClient* client, bool is_human) {
         std::cout << "AI_SERVER:\n\treceive port: " << receive_port <<"\n\thuman controlled: " << (is_human? "true" : "false") << "\n" << std::endl;
+        setpriority(PRIO_PROCESS, 0, 0);
         instance = new aiserver(receive_port, client, is_human);
     }
 

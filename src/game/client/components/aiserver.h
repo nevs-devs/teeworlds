@@ -61,7 +61,12 @@ public:
 
     static void init(const std::string& receive_port, IClient* client, bool is_human) {
         std::cout << "AI_SERVER:\n\treceive port: " << receive_port <<"\n\thuman controlled: " << (is_human? "true" : "false") << "\n" << std::endl;
-        setpriority(PRIO_PROCESS, 0, 0);
+
+        const int priority = getpriority(PRIO_PROCESS, 0);
+        if (priority < 0) {
+            setpriority(PRIO_PROCESS, 0, -priority);
+            std::cout << "setting priority to 0" << std::endl;
+        }
         instance = new aiserver(receive_port, client, is_human);
     }
 

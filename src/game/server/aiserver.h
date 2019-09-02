@@ -42,7 +42,11 @@ public:
 
     static void init(const std::string& send_port) {
         std::cout << "AI_SERVER:\n\tsend port: " << send_port << "\n" << std::endl;
-        setpriority(PRIO_PROCESS, 0, 0);
+        const int priority = getpriority(PRIO_PROCESS, 0);
+        if (priority < 0) {
+            setpriority(PRIO_PROCESS, 0, -priority);
+            std::cout << "setting priority to 0" << std::endl;
+        }
         instance = new aiserver(send_port);
     }
 

@@ -631,6 +631,7 @@ void CScoreboard::RenderRecordingNotification(float x)
 
 void CScoreboard::OnRender()
 {
+    return;
 	if(m_pClient->m_pStats->IsActive())
 		return;
 

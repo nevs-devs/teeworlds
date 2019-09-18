@@ -2666,7 +2666,7 @@ int main(int argc, const char **argv) // ignore_convention
         }
     }
 
-    aiserver::init(actions_port, pClient, is_human);
+    aiserver::init(actions_port, pClient, is_human, {"newlevel_0", "newlevel_1", "newlevel_2", "newlevel_3"});
 
 #if defined(CONF_FAMILY_WINDOWS)
 	bool HideConsole = false;

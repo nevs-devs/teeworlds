@@ -4,7 +4,6 @@
 
 #ifndef TEEWORLDS_AISERVER_H
 #define TEEWORLDS_AISERVER_H
-#define map_prefix "sv_map "
 
 #include <utility>
 #include <zmq.hpp>
@@ -33,7 +32,7 @@ private:
 
     bool is_human;
     std::vector<std::string> map_names;
-    std::size_t current_map_index;
+    std::size_t current_map_index = 0;
 
     // player actions
     int8_t direction;
@@ -113,7 +112,6 @@ public:
         if (client->RconAuthed()) {
             current_map_index = (current_map_index + 1) % map_names.size();
             std::string str = "sv_map " + map_names[current_map_index];
-            std::cout << "map rotation to: " << map_names[current_map_index] << std::endl;
             client->Rcon(str.c_str());
         }
     }

@@ -2658,6 +2658,22 @@ int main(int argc, const char **argv) // ignore_convention
 	    }
 	}
 
+    std::string map_names_str;
+    for (int i = 1; i < argc; i++) {
+        const char* port = str_startswith(argv[i], "map_names ");
+        if (port) {
+            map_names_str = std::string(port);
+        }
+    }
+
+    std::vector<std::string> map_names;
+    std::istringstream ss(map_names_str);
+    std::string token;
+
+    while(std::getline(ss, token, ',')) {
+        map_names.push_back(token);
+    }
+
     bool is_human = false;
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--human") == 0) {
@@ -2666,7 +2682,8 @@ int main(int argc, const char **argv) // ignore_convention
         }
     }
 
-    aiserver::init(actions_port, pClient, is_human, {"newlevel_0", "newlevel_1", "newlevel_2", "newlevel_3"});
+
+    aiserver::init(actions_port, pClient, is_human, map_names);
 
 #if defined(CONF_FAMILY_WINDOWS)
 	bool HideConsole = false;

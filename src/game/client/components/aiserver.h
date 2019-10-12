@@ -113,6 +113,7 @@ public:
             current_map_index = (current_map_index + 1) % map_names.size();
             std::string str = "sv_map " + map_names[current_map_index];
             client->Rcon(str.c_str());
+            reset_game();
         }
     }
 
